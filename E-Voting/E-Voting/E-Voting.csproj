@@ -45,10 +45,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -121,8 +129,57 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ad.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Admin.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConectionDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConectionDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConectionDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ConectionDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConectionDB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Contact.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DATE.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Debate.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GeneralListCandidate.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GeneralListing.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LocalList.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LocalListCandidate.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Payment.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\User.cs">
+      <DependentUpon>ConectionDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -143,15 +200,129 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="css\styles.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\about_feat_bg.jpg" />
+    <Content Include="images\about_feat_bg_2.jpg" />
+    <Content Include="images\about_us_bg.html" />
+    <Content Include="images\achievements.jpg" />
+    <Content Include="images\bg-geometry.html" />
+    <Content Include="images\blog_1.jpg" />
+    <Content Include="images\blog_2.jpg" />
+    <Content Include="images\blog_3.jpg" />
+    <Content Include="images\blog_thumb_1.jpg" />
+    <Content Include="images\blog_thumb_2.jpg" />
+    <Content Include="images\blog_thumb_3.jpg" />
+    <Content Include="images\cta-bg-img.jpg" />
+    <Content Include="images\down_arrow.png" />
+    <Content Include="images\event_1.jpg" />
+    <Content Include="images\event_2.jpg" />
+    <Content Include="images\event_3.jpg" />
+    <Content Include="images\event_4.jpg" />
+    <Content Include="images\event_single.jpg" />
+    <Content Include="images\favicon.png" />
+    <Content Include="images\gallery_1.jpg" />
+    <Content Include="images\gallery_2.jpg" />
+    <Content Include="images\gallery_3.jpg" />
+    <Content Include="images\gallery_4.jpg" />
+    <Content Include="images\gallery_5.jpg" />
+    <Content Include="images\gallery_6.jpg" />
+    <Content Include="images\gallery_7.jpg" />
+    <Content Include="images\gallery_8.jpg" />
+    <Content Include="images\header-bg.jpg" />
+    <Content Include="images\highlight_1.jpg" />
+    <Content Include="images\highlight_2.jpg" />
+    <Content Include="images\highlight_3.jpg" />
+    <Content Include="images\highlight_4.jpg" />
+    <Content Include="images\highlight_5.jpg" />
+    <Content Include="images\highlight_6.jpg" />
+    <Content Include="images\home_1_slider_1.jpg" />
+    <Content Include="images\loader.gif" />
+    <Content Include="images\logo-footer.png" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\logo_1.png" />
+    <Content Include="images\logo_2.png" />
+    <Content Include="images\logo_3.png" />
+    <Content Include="images\logo_4.png" />
+    <Content Include="images\logo_5.png" />
+    <Content Include="images\logo_6.png" />
+    <Content Include="images\logo_7.png" />
+    <Content Include="images\logo_8.png" />
+    <Content Include="images\pattern_1.png" />
+    <Content Include="images\separator.png" />
+    <Content Include="images\signature.png" />
+    <Content Include="images\team_5.jpg" />
+    <Content Include="images\team_6.jpg" />
+    <Content Include="images\team_7.jpg" />
+    <Content Include="images\team_9.jpg" />
+    <Content Include="images\testimony_feat_img.jpg" />
+    <Content Include="images\uparr-48-b.png" />
+    <Content Include="images\user_1.jpg" />
+    <Content Include="images\user_2.jpg" />
+    <Content Include="images\user_3.jpg" />
+    <Content Include="images\user_4.jpg" />
+    <Content Include="js\custom-scripts.js" />
+    <Content Include="js\jquery.gmap.min.html" />
+    <Content Include="libs\animate\styles\animate.css" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regular-2.html" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regular-3.html" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regular-4.html" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regular-5.html" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regular.html" />
+    <Content Include="libs\bootstrap\fonts\glyphicons-halflings-regulard41d.html" />
+    <Content Include="libs\bootstrap\scripts\bootstrap.min.js" />
+    <Content Include="libs\bootstrap\styles\bootstrap.min.css" />
+    <Content Include="libs\font-awesome\font-awesome.min.css" />
+    <Content Include="libs\fonts\fontawesome-webfont5b62.svg" />
+    <Content Include="libs\jquery.backTop\scripts\jquery.backTop.min.js" />
+    <Content Include="libs\jquery.countdown\scripts\jquery.countdown.min.js" />
+    <Content Include="libs\jquery.counterup\scripts\jquery.counterup.min.js" />
+    <Content Include="libs\jquery.gmap\scripts\jquery.gmap.min.js" />
+    <Content Include="libs\jquery.stellar\scripts\jquery.stellar.min.js" />
+    <Content Include="libs\jquery\scripts\jquery.min.js" />
+    <Content Include="libs\owl.carousel\scripts\owl.carousel.min.js" />
+    <Content Include="libs\owl.carousel\styles\owl.carousel.css" />
+    <Content Include="libs\owl.carousel\styles\owl.theme.css" />
+    <Content Include="libs\owl.carousel\styles\owl.video.play.html" />
+    <Content Include="libs\venobox\images\close.html" />
+    <Content Include="libs\venobox\images\next.html" />
+    <Content Include="libs\venobox\images\preload-circle.html" />
+    <Content Include="libs\venobox\images\prev.html" />
+    <Content Include="libs\venobox\scripts\venobox.min.js" />
+    <Content Include="libs\venobox\styles\venobox.css" />
+    <Content Include="libs\waypoints\scripts\waypoints-sticky.min.js" />
+    <Content Include="libs\waypoints\scripts\waypoints.min.js" />
+    <Content Include="libs\wow\scripts\wow.min.js" />
+    <Content Include="Models\ConectionDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConectionDB.Context.cs</LastGenOutput>
+      <DependentUpon>ConectionDB.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\ConectionDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ConectionDB.edmx</DependentUpon>
+      <LastGenOutput>ConectionDB.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libs\fonts\fontawesome-webfont5b62.eot" />
+    <Content Include="libs\fonts\fontawesome-webfont5b62.ttf" />
+    <Content Include="libs\fonts\fontawesome-webfont5b62.woff" />
+    <Content Include="libs\fonts\fontawesome-webfont5b62.woff2" />
+    <Content Include="libs\fonts\fontawesome-webfontd41d.eot" />
+    <EntityDeploy Include="Models\ConectionDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ConectionDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ConectionDB.edmx.diagram">
+      <DependentUpon>ConectionDB.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -177,10 +348,16 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\view.cshtml" />
+    <Content Include="Views\USER\Login.cshtml" />
+    <Content Include="Views\USER\LoginUser.cshtml" />
+    <Content Include="Views\USER\TypeOfElection.cshtml" />
+    <Content Include="Views\USER\LocalElections.cshtml" />
+    <Content Include="Views\USER\PartyElections.cshtml" />
+    <Content Include="Views\USER\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -208,6 +385,9 @@
     <Content Include="Scripts\bootstrap.bundle.js.map" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

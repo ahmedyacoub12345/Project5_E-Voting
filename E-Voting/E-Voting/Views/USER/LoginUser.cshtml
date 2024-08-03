@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "LoginUser";
+}
+
+<h2>Login User</h2>
+
+@using (Html.BeginForm("LoginUser", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.Label("National Number")
+        @Html.TextBox("NationalNumber", new { @class = "form-control", @readonly = "readonly" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Email")
+        @Html.TextBox("Email", null, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Password")
+        @Html.Password("password", null, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Login</button>
+}
+
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })

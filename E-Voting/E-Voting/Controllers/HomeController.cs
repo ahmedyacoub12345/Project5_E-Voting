@@ -26,5 +26,10 @@ namespace E_Voting.Controllers
 
             return View();
         }
+        public ActionResult view()
+        {
+
+            return View();
+        }
     }
 }
