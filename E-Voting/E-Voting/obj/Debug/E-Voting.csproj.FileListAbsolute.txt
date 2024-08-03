@@ -51,6 +51,8 @@ C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\roslyn\vbc.rsp
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\roslyn\VBCSCompiler.exe
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\Antlr3.Runtime.dll
+C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.dll
+C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.SqlServer.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\Microsoft.Web.Infrastructure.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\Newtonsoft.Json.dll
@@ -62,6 +64,8 @@ C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.WebPa
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.WebPages.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.WebPages.Razor.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\WebGrease.dll
+C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.xml
+C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.SqlServer.xml
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.Helpers.xml
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.Mvc.xml
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\System.Web.Optimization.xml
@@ -77,7 +81,3 @@ C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\obj\Debug\E-Voting.c
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\obj\Debug\E-Voting.csproj.Up2Date
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\obj\Debug\E-Voting.dll
 C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\obj\Debug\E-Voting.pdb
-C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.dll
-C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.SqlServer.dll
-C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.xml
-C:\Users\Orange\Desktop\Project5_E-Voting\E-Voting\E-Voting\bin\EntityFramework.SqlServer.xml

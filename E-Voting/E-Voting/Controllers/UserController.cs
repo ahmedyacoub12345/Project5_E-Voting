@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using Newtonsoft.Json;
+using System.Xml;
+using System.Threading;
 
 namespace E_Voting.Controllers
 {
@@ -63,6 +65,7 @@ namespace E_Voting.Controllers
 
             return View();
         }
+
         public ActionResult LoginUser(string NationalNumber, string Email, string password)
         {
             var user = DB.Users.FirstOrDefault(u => u.NationalNumber == NationalNumber);
@@ -138,6 +141,8 @@ namespace E_Voting.Controllers
             {
                 return HttpNotFound();
             }
+
+            //LocalElection
             if (user.LocalElections is false)
             {
 
@@ -147,6 +152,18 @@ namespace E_Voting.Controllers
             {
                 ViewBag.LocalElectionsPath = null;
             }
+            //WhiteLocalElection
+            if (user.whitePaperLocalElections is false)
+            {
+
+                ViewBag.LocalElectionsPath = "White LocalElections";
+            }
+            else
+            {
+                ViewBag.LocalElectionsPath = null;
+            }
+
+            //PartyElections
             if (user.PartyElections is false)
             {
 
