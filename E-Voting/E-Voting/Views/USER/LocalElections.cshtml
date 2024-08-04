@@ -1,7 +1,39 @@
-﻿@{
+﻿@model IEnumerable<E_Voting.Models.LocalList>
+
+@{
     ViewBag.Title = "Local Elections";
 }
 
 <h2>Local Elections</h2>
 
 <p>Welcome to the local elections page.</p>
+
+@using (Html.BeginForm("LocalElections", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        @foreach (var list in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@list.ListName</h5>
+                        <p class="card-text">
+                            Election Area: @list.ElectionArea<br />
+                            Governorate: @list.Governorate
+                        </p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="selectedListId" value="@list.ID" id="list@list.ID">
+                            <label class="form-check-label" for="list@list.ID">
+                                Select this list
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}

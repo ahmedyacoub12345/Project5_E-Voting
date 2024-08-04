@@ -1,7 +1,39 @@
-﻿@{
+﻿@model IEnumerable<E_Voting.Models.GeneralListing>
+
+@{
     ViewBag.Title = "Party Elections";
 }
 
 <h2>Party Elections</h2>
 
 <p>Welcome to the party elections page.</p>
+
+@using (Html.BeginForm("PartyElections", "User", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        @foreach (var party in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@party.Name</h5>
+                        <p class="card-text">
+                            Party Area: @party.Name<br />
+                            Party Details: @party.Name
+                        </p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="selectedPartyListId" value="@party.GeneralListingID" id="party@party.ID">
+                            <label class="form-check-label" for="party@party.ID">
+                                Select this party
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}

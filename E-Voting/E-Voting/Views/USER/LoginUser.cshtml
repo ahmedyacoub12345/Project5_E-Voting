@@ -10,12 +10,12 @@
 
     <div class="form-group">
         @Html.Label("National Number")
-        @Html.TextBox("NationalNumber", new { @class = "form-control", @readonly = "readonly" })
+        @Html.TextBox("NationalNumber", (string)ViewBag.NationalNumber, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
         @Html.Label("Email")
-        @Html.TextBox("Email", null, new { @class = "form-control" })
+        @Html.TextBox("Email", (string)ViewBag.Email, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
