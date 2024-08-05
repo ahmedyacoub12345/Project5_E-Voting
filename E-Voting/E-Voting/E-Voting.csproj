@@ -355,6 +355,8 @@
     <Content Include="Views\USER\LocalElections.cshtml" />
     <Content Include="Views\USER\PartyElections.cshtml" />
     <Content Include="Views\USER\Index.cshtml" />
+    <Content Include="Views\USER\ElectionDistricts.cshtml" />
+    <Content Include="Views\USER\IrbedFirstDistrict.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

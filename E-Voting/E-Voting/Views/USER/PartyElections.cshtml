@@ -19,14 +19,11 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">@party.Name</h5>
-                        <p class="card-text">
-                            Party Area: @party.Name<br />
-                            Party Details: @party.Name
-                        </p>
+
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="selectedPartyListId" value="@party.GeneralListingID" id="party@party.ID">
-                            <label class="form-check-label" for="party@party.ID">
-                                Select this party
+                            <input class="form-check-input" type="radio" name="selectedPartyListId" value="@party.GeneralListingID" id="party@party.GeneralListingID">
+                            <label class="form-check-label" for="party@party.GeneralListingID">
+                                @party.Name
                             </label>
                         </div>
                     </div>

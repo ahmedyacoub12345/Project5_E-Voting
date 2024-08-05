@@ -10,6 +10,7 @@
 namespace E_Voting.Models
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
@@ -36,5 +37,6 @@ namespace E_Voting.Models
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ad> Ads { get; set; }
+        public IEnumerable<object> Candidates { get; internal set; }
     }
 }

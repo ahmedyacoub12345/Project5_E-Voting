@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Election Districts";
+    string electionArea = ViewBag.ElectionArea;
+}
+
+<h2>اختيار الدائرة الانتخابية</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block"
+                    onclick="location.href='@Url.Action("IrbedFirstDistrict", "USER")'"
+                    @(electionArea == "Area 1" ? "" : "disabled")>
+                دائرة اربد الاولى
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block"
+                    onclick="location.href='@Url.Action("IrbedSecondDistrict", "USER")'"
+                    @(electionArea == "Area 2" ? "" : "disabled")>
+                دائرة اربد الثانيه
+            </button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" class="btn btn-primary btn-block"
+                    onclick="location.href='@Url.Action("AjlounDistrict", "USER")'"
+                    @(electionArea == "Area 3" ? "" : "disabled")>
+                دائرة عجلون
+            </button>
+        </div>
+    </div>
+</div>

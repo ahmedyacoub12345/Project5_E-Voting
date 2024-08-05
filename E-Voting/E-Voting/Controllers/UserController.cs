@@ -19,7 +19,6 @@ namespace E_Voting.Controllers
             return View();
         }
 
-        // الأكشن لتسجيل الدخول
         public ActionResult Login(User user)
         {
             try
@@ -51,7 +50,7 @@ namespace E_Voting.Controllers
 
                 // تخزين المستخدم في الجلسة وإعادة التوجيه إلى LoginUser
                 Session["LoggedUser"] = JsonConvert.SerializeObject(existingUser);
-                return RedirectToAction("LoginUser", new { ID =user.ID });
+                return RedirectToAction("LoginUser", new { ID = user.ID });
             }
             catch (Exception ex)
             {
@@ -62,7 +61,6 @@ namespace E_Voting.Controllers
             return View();
         }
 
-        // الأكشن لاستقبال طلب تسجيل الدخول
         public ActionResult LoginUser(string nationalNumber)
         {
             var user = DB.Users.FirstOrDefault(u => u.NationalNumber == nationalNumber);
@@ -73,15 +71,17 @@ namespace E_Voting.Controllers
                 return View();
             }
 
-            // تخزين المستخدم في الجلسة
+            // Save in session
             Session["LoggedUser"] = JsonConvert.SerializeObject(user);
             ViewBag.NationalNumber = nationalNumber;
             ViewBag.Email = user.Email;
-            return RedirectToAction("TypeOfElection", new { id = user.ID});
 
+            // Redirect to the new page with buttons
+            return RedirectToAction("ElectionDistricts");
         }
 
-        // توليد كلمة مرور عشوائية
+
+        //Generate password
         private string GenerateRandomPassword()
         {
             const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -95,7 +95,7 @@ namespace E_Voting.Controllers
             return res.ToString();
         }
 
-        // إرسال بريد تأكيد بكلمة المرور الجديدة
+        // Send Email
         private void SendConfirmationEmail(string toEmail, string confirmationCode)
         {
             string fromEmail = System.Configuration.ConfigurationManager.AppSettings["FromEmail"];
@@ -127,7 +127,6 @@ namespace E_Voting.Controllers
             }
         }
 
-        // الأكشن لتحديد نوع الانتخابات
         public ActionResult TypeOfElection(int id)
         {
             var user = DB.Users.Find(id);
@@ -136,40 +135,19 @@ namespace E_Voting.Controllers
                 return HttpNotFound();
             }
 
-            // تحديد مسارات الانتخابات المحلية
-            if ((bool)!user.LocalElections)
-            {
-                ViewBag.LocalElectionsPath = "LocalElections";
-            }
-            else
-            {
-                ViewBag.LocalElectionsPath = null;
-            }
+            // Save the user to the session
+            Session["LoggedUser"] = JsonConvert.SerializeObject(user);
+            ViewBag.NationalNumber = user.NationalNumber;
 
-            // تحديد مسارات الانتخابات المحلية بالورقة البيضاء
-            if ((bool)!user.whitePaperLocalElections)
-            {
-                ViewBag.WhiteLocalElectionsPath = "White LocalElections";
-            }
-            else
-            {
-                ViewBag.WhiteLocalElectionsPath = null;
-            }
-
-            // تحديد مسارات انتخابات الحزب
-            if ((bool)!user.PartyElections)
-            {
-                ViewBag.PartyElections = "PartyElections";
-            }
-            else
-            {
-                ViewBag.PartyElections = null;
-            }
+            // Determine the paths for elections
+            ViewBag.LocalElectionsPath = (bool)user.LocalElections ? null : "LocalElections";
+            ViewBag.PartyElectionsPath = (bool)user.PartyElections ? null : "PartyElections";
 
             return View();
         }
 
-        // الأكشن للانتخابات المحلية
+
+
         public ActionResult LocalElections()
         {
             if (Session["LoggedUser"] == null)
@@ -182,12 +160,20 @@ namespace E_Voting.Controllers
 
             ViewBag.UserId = user.ID;
 
-            var localLists = DB.LocalLists.ToList();
-            return View(localLists);
+            var localLists = DB.LocalLists.Where(l => l.ElectionArea == user.ElectionArea).ToList();
+            var candidates = DB.LocalListCandidates.ToList();
+
+            ViewBag.LocalLists = localLists;
+            ViewBag.Candidates = candidates;
+
+            return View();
         }
 
+
+
         [HttpPost]
-        public ActionResult LocalElections(int selectedListId)
+        [ValidateAntiForgeryToken]
+        public ActionResult LocalElections(int selectedListId, int[] selectedCandidateIds)
         {
             if (Session["LoggedUser"] == null)
             {
@@ -198,11 +184,28 @@ namespace E_Voting.Controllers
             var user = JsonConvert.DeserializeObject<User>(userJson);
 
             var selectedList = DB.LocalLists.Find(selectedListId);
-            if (selectedList != null)
+
+            if (selectedList != null && selectedCandidateIds != null)
             {
+                // Update the number of votes for the selected list
+                selectedList.NumberOfVotes += 1;
+                DB.Entry(selectedList).State = System.Data.Entity.EntityState.Modified;
+
+                // Update the number of votes for the selected candidates
+                foreach (var candidateId in selectedCandidateIds)
+                {
+                    var selectedCandidate = DB.LocalListCandidates.FirstOrDefault(c => c.CandidateID == candidateId && c.LocalListingID == selectedListId);
+                    if (selectedCandidate != null)
+                    {
+                        selectedCandidate.NumberOfVotesCandidate += 1;
+                        DB.Entry(selectedCandidate).State = System.Data.Entity.EntityState.Modified;
+                    }
+                }
+
                 // Update user table to reflect that the user has voted in local elections
                 user.LocalElections = true;
                 DB.Entry(user).State = System.Data.Entity.EntityState.Modified;
+
                 DB.SaveChanges();
             }
 
@@ -222,6 +225,7 @@ namespace E_Voting.Controllers
 
             ViewBag.UserId = user.ID;
 
+            // Retrieve all party lists to display in the view
             var partyLists = DB.GeneralListings.ToList();
             return View(partyLists);
         }
@@ -242,7 +246,12 @@ namespace E_Voting.Controllers
             {
                 // Update user table to reflect that the user has voted in party elections
                 user.PartyElections = true;
-                DB.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                user.LocalElections = true; // Optionally, you can set LocalElections to true here if needed
+
+                // Update the party list to increment the number of votes
+                selectedPartyList.NumberOfVotes += 1;
+                DB.Entry(selectedPartyList).State = System.Data.Entity.EntityState.Modified;
+                DB.Entry(user).State = System.Data.Entity.EntityState.Modified; // Ensure user entity is being tracked
                 DB.SaveChanges();
             }
 
@@ -250,5 +259,125 @@ namespace E_Voting.Controllers
         }
 
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+        public ActionResult ElectionDistricts()
+        {
+            if (Session["LoggedUser"] == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var userJson = Session["LoggedUser"].ToString();
+            var user = JsonConvert.DeserializeObject<User>(userJson);
+
+            ViewBag.ElectionArea = user.ElectionArea;
+
+            return View();
+        }
+
+
+        public ActionResult IrbedFirstDistrict()
+        {
+            try
+            {
+                if (Session["LoggedUser"] == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var userJson = Session["LoggedUser"].ToString();
+                var user = JsonConvert.DeserializeObject<User>(userJson);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found.");
+                    return RedirectToAction("Login");
+                }
+
+                user.ElectionArea = "Area 1"; // Setting election area to IrbedFirstDistrict
+                DB.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                DB.SaveChanges();
+
+                // Redirect to TypeOfElection with the user's ID
+                return RedirectToAction("TypeOfElection", new { id = user.ID });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while processing your request. Please try again later.");
+                Console.WriteLine("Exception message: " + ex.Message);
+                return RedirectToAction("Login");
+            }
+        }
+
+
+        public ActionResult IrbedSecondDistrict()
+        {
+            try
+            {
+                if (Session["LoggedUser"] == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var userJson = Session["LoggedUser"].ToString();
+                var user = JsonConvert.DeserializeObject<User>(userJson);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found.");
+                    return RedirectToAction("Login");
+                }
+
+                user.ElectionArea = "Area 2"; // Setting election area to IrbedFirstDistrict
+                DB.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                DB.SaveChanges();
+
+                // Redirect to TypeOfElection with the user's ID
+                return RedirectToAction("TypeOfElection", new { id = user.ID });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while processing your request. Please try again later.");
+                Console.WriteLine("Exception message: " + ex.Message);
+                return RedirectToAction("Login");
+            }
+        }
+
+        public ActionResult AjlounDistrict()
+        {
+            try
+            {
+                if (Session["LoggedUser"] == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                var userJson = Session["LoggedUser"].ToString();
+                var user = JsonConvert.DeserializeObject<User>(userJson);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User not found.");
+                    return RedirectToAction("Login");
+                }
+
+                user.ElectionArea = "Area 3"; // Setting election area to IrbedFirstDistrict
+                DB.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                DB.SaveChanges();
+
+                // Redirect to TypeOfElection with the user's ID
+                return RedirectToAction("TypeOfElection", new { id = user.ID });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "An error occurred while processing your request. Please try again later.");
+                Console.WriteLine("Exception message: " + ex.Message);
+                return RedirectToAction("Login");
+            }
+        }
     }
+
+
 }
+

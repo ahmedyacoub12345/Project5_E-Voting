@@ -1,7 +1,7 @@
-﻿@model IEnumerable<E_Voting.Models.LocalList>
-
-@{
+﻿@{
     ViewBag.Title = "Local Elections";
+    var localLists = ViewBag.LocalLists as List<E_Voting.Models.LocalList>;
+    var candidates = ViewBag.Candidates as List<E_Voting.Models.LocalListCandidate>;
 }
 
 <h2>Local Elections</h2>
@@ -13,25 +13,44 @@
     @Html.AntiForgeryToken()
 
     <div class="row">
-        @foreach (var list in Model)
+        @if (localLists != null && localLists.Any())
         {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">@list.ListName</h5>
-                        <p class="card-text">
-                            Election Area: @list.ElectionArea<br />
-                            Governorate: @list.Governorate
-                        </p>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="selectedListId" value="@list.ID" id="list@list.ID">
-                            <label class="form-check-label" for="list@list.ID">
-                                Select this list
-                            </label>
+            foreach (var list in localLists)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">@list.ListName</h5>
+                            <p class="card-text">
+                                Election Area: @list.ElectionArea<br />
+                                Governorate: @list.Governorate
+                            </p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selectedListId" value="@list.ID" id="list@list.ID">
+                                <label class="form-check-label" for="list@list.ID">
+                                    @list.ListName
+                                </label>
+                            </div>
+                            <p>
+                                <strong>Candidates:</strong><br />
+                                @foreach (var candidate in candidates.Where(c => c.LocalListingID == list.ID))
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="selectedCandidateIds" value="@candidate.CandidateID" id="candidate@candidate.CandidateID">
+                                        <label class="form-check-label" for="candidate@candidate.CandidateID">
+                                            @candidate.CandidateName
+                                        </label>
+                                    </div>
+                                }
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <p>No lists available for your election area.</p>
         }
     </div>
 
